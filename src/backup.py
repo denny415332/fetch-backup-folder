@@ -3,6 +3,8 @@
 from pathlib import Path
 import shutil
 
+from src.logger import logger
+
 
 def get_progress(copied_files: int, total_files: int) -> float:
     """計算複製進度百分比
@@ -43,14 +45,14 @@ def copy_file_with_progress(
             copied_files += 1
             progress = get_progress(copied_files, total_files)
             if progress % 5 < progress - get_progress(copied_files - 1, total_files):
-                print(f"進度: {progress:.2f}%")
+                logger.info(f"進度: {progress:.2f}%")
             return copied_files
 
     shutil.copy2(src, dst)
     copied_files += 1
     progress = get_progress(copied_files, total_files)
     if progress % 5 < progress - get_progress(copied_files - 1, total_files):
-        print(f"進度: {progress:.2f}%")
+        logger.info(f"進度: {progress:.2f}%")
     return copied_files
 
 
@@ -66,12 +68,12 @@ def copy_folder(src: str, dst: str):
 
     if not dst_path.exists():
         dst_path.mkdir(parents=True, exist_ok=True)
-        print(f"建立資料夾: '{dst_path}'")
+        logger.info(f"建立資料夾: '{dst_path}'")
 
     files_to_copy = [p for p in src_path.rglob("*") if p.is_file()]
     total_files = len(files_to_copy)
     if total_files == 0:
-        print("沒有檔案需要複製。")
+        logger.info("沒有檔案需要複製。")
         return
 
     copied_files = 0
@@ -93,12 +95,12 @@ def copy_folder(src: str, dst: str):
 
         if not current_dst.exists():
             current_dst.mkdir(parents=True, exist_ok=True)
-            print(f"建立資料夾: '{current_dst}'")
+            logger.info(f"建立資料夾: '{current_dst}'")
 
         for item in current_src.iterdir():
             target = current_dst / item.name
             if item.is_dir():
-                print(f"複製資料夾: '{item}'")
+                logger.info(f"複製資料夾: '{item}'")
                 recursive_copy(item, target)
             else:
                 copied_files = copy_file_with_progress(
@@ -106,4 +108,4 @@ def copy_folder(src: str, dst: str):
                 )
 
     recursive_copy(src_path, dst_path)
-    print("複製完成！")
+    logger.info("複製完成！")
