@@ -1,6 +1,8 @@
 """日誌記錄模組，提供日誌記錄管理器"""
 
 import inspect
+from pathlib import Path
+from datetime import datetime
 from logging import FileHandler, Formatter, Logger, StreamHandler, getLogger, DEBUG
 
 
@@ -20,16 +22,27 @@ class LogManager:
         Args:
             name (str): 記錄器名稱
         """
+
+        # 建立日誌路徑
+        now = datetime.now()
+        log_path = (
+            Path("log") / f"{now.strftime('%Y')}" / f"{now.strftime('%Y-%m')}.txt"
+        )
+
         # 設定記錄器
         self._logger = getLogger(name)
         self._logger.setLevel(DEBUG)
+
+        # 如果資料夾不存在，則建立資料夾
+        if not log_path.exists():
+            log_path.parent.mkdir(parents=True, exist_ok=True)
 
         # 設定主控台處理器
         self._console_handler = StreamHandler()
         self._console_handler.setLevel(DEBUG)
 
         # 設定檔案處理器
-        self._file_handler = FileHandler("log.txt")
+        self._file_handler = FileHandler(log_path)
         self._file_handler.setLevel(DEBUG)
 
         # 設定格式器
