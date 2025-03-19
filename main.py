@@ -1,3 +1,5 @@
+"""主程式，用於執行資料夾備份功能。"""
+
 from src.backup import copy_folder
 
 REMOTE_PATH = r"T:\資料交換一天\1568"
