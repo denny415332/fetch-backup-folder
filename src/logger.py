@@ -26,7 +26,10 @@ class LogManager:
         # 建立日誌路徑
         now = datetime.now()
         log_path = (
-            Path("log") / f"{now.strftime('%Y')}" / f"{now.strftime('%Y-%m')}.txt"
+            Path("log")
+            / f"{now.strftime('%Y')}"
+            / f"{now.strftime('%Y-%m')}"
+            / f"{now.strftime('%Y-%m-%d')}.txt"
         )
 
         # 設定記錄器
