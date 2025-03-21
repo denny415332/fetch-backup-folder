@@ -28,7 +28,7 @@ class LogManager:
         log_path = (
             Path("log")
             / f"{now.strftime('%Y')}"
-            / f"{now.strftime('%Y-%m')}"
+            / f"{now.strftime('%Y.%m')}"
             / f"{now.strftime('%Y-%m-%d')}.txt"
         )
 
