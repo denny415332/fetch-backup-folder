@@ -3,7 +3,8 @@
 from src.backup import copy_folder
 from src.logger import logger
 
-REMOTE_PATH = r"T:\資料交換一天\1568"
+# REMOTE_PATH = r"T:\資料交換一天\1568" # 遠端資料夾路徑(本機磁碟)
+REMOTE_PATH = r"\\Tyofs01p\fs\資料交換一天\1568"  # 遠端資料夾路徑(網路磁碟)
 """遠端資料夾路徑"""
 BACKUP_PATH = r"D:\1568"
 """備份資料夾路徑"""
