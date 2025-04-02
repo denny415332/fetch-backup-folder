@@ -11,6 +11,8 @@ BACKUP_PATH = r"D:\1568"
 if __name__ == "__main__":
     logger.info("")
     logger.info("正在複製備份到本機...")
+    logger.info(f"遠端資料夾路徑: {REMOTE_PATH}")
+    logger.info(f"備份資料夾路徑: {BACKUP_PATH}")
     copy_folder(REMOTE_PATH, BACKUP_PATH)
     logger.info("複製備份到本機完成")
     # input("按下 Enter 鍵離開...")

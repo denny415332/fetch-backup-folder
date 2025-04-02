@@ -66,12 +66,17 @@ def copy_folder(src: str, dst: str):
     src_path = Path(src)
     dst_path = Path(dst)
 
+    if not src_path.exists():
+        logger.error(f"來源資料夾不存在: '{src_path}'")
+        return
+
     if not dst_path.exists():
         dst_path.mkdir(parents=True, exist_ok=True)
         logger.info(f"建立資料夾: '{dst_path}'")
 
     files_to_copy = [p for p in src_path.rglob("*") if p.is_file()]
     total_files = len(files_to_copy)
+    logger.info(f"需要複製的檔案數量: {total_files}")
     if total_files == 0:
         logger.info("沒有檔案需要複製。")
         return
