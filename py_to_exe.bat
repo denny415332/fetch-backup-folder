@@ -19,12 +19,15 @@ ECHO 正在建立輸出路徑 "%distpath%"
 mkdir "%buildpath%"
 ECHO 正在建立輸出路徑 "%buildpath%"
 
+DEL "*.spec"
+ECHO 刪除 *.spec 檔案
+
 @REM 轉換為 exe 檔案
 pyinstaller -F run_copy_backup_to_local.py ^
             --workpath "%buildpath%" ^
             --distpath "%distpath%" ^
-            --clean ^
-            -y
+            --optimize 2 ^
+            --noconfirm
 
 DEL "*.spec"
 ECHO 刪除 *.spec 檔案
