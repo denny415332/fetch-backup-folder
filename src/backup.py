@@ -118,6 +118,7 @@ def copy_folder(src: str, dst: str):
     logger.info(f"總檔案大小: {format_size(total_size)}")
 
     copied_files = 0
+    actual_copied_size = 0  # 新增：實際複製的檔案大小計數器
 
     def recursive_copy(current_src: Path, current_dst: Path):
         """遞迴複製資料夾及其內容到目標位置
@@ -126,9 +127,11 @@ def copy_folder(src: str, dst: str):
             current_src (Path): 當前來源路徑
             current_dst (Path): 當前目標路徑
         """
-        nonlocal copied_files
+        nonlocal copied_files, actual_copied_size  # 新增：actual_copied_size
 
         if not current_src.is_dir():
+            if not current_dst.exists() or current_src.stat().st_size != current_dst.stat().st_size:
+                actual_copied_size += current_src.stat().st_size  # 新增：累計實際複製的檔案大小
             copied_files = copy_file_with_progress(
                 current_src, current_dst, copied_files, total_files
             )
@@ -144,9 +147,11 @@ def copy_folder(src: str, dst: str):
                 logger.info(f"複製資料夾: '{item}'")
                 recursive_copy(item, target)
             else:
+                if not target.exists() or item.stat().st_size != target.stat().st_size:
+                    actual_copied_size += item.stat().st_size  # 新增：累計實際複製的檔案大小
                 copied_files = copy_file_with_progress(
                     item, target, copied_files, total_files
                 )
 
     recursive_copy(src_path, dst_path)
-    logger.info("複製完成！")
+    logger.info(f"複製完成！實際複製檔案大小: {format_size(actual_copied_size)}")
