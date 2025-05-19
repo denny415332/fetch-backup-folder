@@ -19,6 +19,38 @@ def get_progress(copied_files: int, total_files: int) -> float:
     return (copied_files / total_files) * 100
 
 
+def get_total_size(path: Path) -> int:
+    """計算資料夾中所有檔案的總大小
+
+    Args:
+        path (Path): 資料夾路徑
+
+    Returns:
+        int: 總檔案大小（位元組）
+    """
+    total_size = 0
+    for file_path in path.rglob("*"):
+        if file_path.is_file():
+            total_size += file_path.stat().st_size
+    return total_size
+
+
+def format_size(size_bytes: int) -> str:
+    """將位元組大小轉換為人類可讀的格式
+
+    Args:
+        size_bytes (int): 位元組大小
+
+    Returns:
+        str: 格式化後的大小字串
+    """
+    for unit in ['B', 'KB', 'MB', 'GB', 'TB']:
+        if size_bytes < 1024.0:
+            return f"{size_bytes:.2f} {unit}"
+        size_bytes /= 1024.0
+    return f"{size_bytes:.2f} PB"
+
+
 def copy_file_with_progress(
     src: Path,
     dst: Path,
@@ -80,6 +112,10 @@ def copy_folder(src: str, dst: str):
     if total_files == 0:
         logger.info("沒有檔案需要複製。")
         return
+
+    # 計算總檔案大小
+    total_size = get_total_size(src_path)
+    logger.info(f"總檔案大小: {format_size(total_size)}")
 
     copied_files = 0
 
